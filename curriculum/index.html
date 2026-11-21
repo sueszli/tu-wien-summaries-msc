@@ -20,24 +20,30 @@ Credit to
 </head>
 <body>
     <h1>Data Science @ TU Wien - Course Selector</h1>
+    <nav class="mobile-nav" aria-label="Course selector sections">
+        <a href="#courses">Courses</a>
+        <a href="#progress-tracker">Progress</a>
+    </nav>
     <div class="container">
         <div class="course-list">
-            <h2>Available Courses</h2>
+            <h2 id="courses" tabindex="-1">Available Courses</h2>
             <div id="courseList"></div>
             <br />
             <div class="recognised-courses">
                 <h2>Other Recognised Courses</h2>
-                <input type="text" id="newCourseName" placeholder="Course Name" />
-                <input type="number" id="newCourseEcts" placeholder="ECTS" min="0" step="0.5" />
-                <select id="moduleSelect">
-                    <!-- Populate with JavaScript dynamically -->
-                </select>
-                <button onclick="addRecognisedCourse()">Add Course</button>
+                <div class="recognised-course-fields">
+                    <input type="text" id="newCourseName" placeholder="Course Name" aria-label="Course name" />
+                    <input type="number" id="newCourseEcts" placeholder="ECTS" aria-label="ECTS" min="0" step="0.5" />
+                    <select id="moduleSelect" aria-label="Module">
+                        <!-- Populate with JavaScript dynamically -->
+                    </select>
+                    <button onclick="addRecognisedCourse()">Add Course</button>
+                </div>
                 <div id="recognisedCoursesList"></div>
             </div>
         </div>
         <div class="progress-tracker">
-            <h2>Progress Tracker</h2>
+            <h2 id="progress-tracker" tabindex="-1">Progress Tracker</h2>
             <div id="progress"></div>
             <div id="totalEcts"></div>
             <div id="graduationStatus"></div>
@@ -509,7 +515,7 @@ h2 {
 
 .container {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     gap: 20px;
 }
 
@@ -548,9 +554,14 @@ h2 {
     background: #f5f5f5;
 }
 
+.course-item input {
+    flex-shrink: 0;
+}
+
 .course-item label {
     margin-left: 8px;
     flex-grow: 1;
+    overflow-wrap: anywhere;
 }
 
 .ects {
@@ -572,6 +583,69 @@ h2 {
     background: #4caf50;
     width: 0%;
     transition: width 0.3s ease;
+}
+
+.mobile-nav {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .course-list,
+    .progress-tracker {
+        padding: 16px;
+    }
+
+    .progress-tracker {
+        position: static;
+    }
+
+    .mobile-nav {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        gap: 8px;
+        padding-block: 8px;
+        margin-bottom: 8px;
+        background: #f5f5f5;
+    }
+
+    .mobile-nav a {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        min-height: 44px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color: #222;
+    }
+
+    #courses,
+    #progress-tracker {
+        scroll-margin-top: 68px;
+    }
+
+    .recognised-course-fields {
+        display: grid;
+        gap: 8px;
+    }
+
+    .recognised-course-fields > * {
+        min-width: 0;
+        width: 100%;
+        min-height: 44px;
+        font: inherit;
+    }
 }
 
 .complete { background: #e8f5e9; }
